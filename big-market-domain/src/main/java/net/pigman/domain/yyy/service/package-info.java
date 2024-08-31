@@ -1,0 +1,1 @@
+package net.pigman.domain.yyy.service;
