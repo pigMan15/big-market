@@ -1,2 +1,1 @@
-# xfg-frame-archetype - DDD 脚手架
-
+# 营销平台 v1.0.0

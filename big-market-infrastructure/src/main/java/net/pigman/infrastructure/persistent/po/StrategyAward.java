@@ -21,7 +21,7 @@ public class StrategyAward {
 
     private Long strategyId;
 
-    private Long awardId;
+    private Integer awardId;
 
     private String awardTitle;
 
