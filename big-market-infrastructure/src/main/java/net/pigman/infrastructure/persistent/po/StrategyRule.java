@@ -20,7 +20,7 @@ public class StrategyRule {
 
     private Long strategyId;
 
-    private Long awardId;
+    private Integer awardId;
 
     private Integer ruleType;
 

@@ -22,6 +22,8 @@ public class Strategy {
 
     private String strategyDesc;
 
+    private String ruleModels;
+
     private Date createTime;
 
     private Date updateTime;

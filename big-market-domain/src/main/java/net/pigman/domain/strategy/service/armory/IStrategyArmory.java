@@ -21,14 +21,4 @@ public interface IStrategyArmory {
      */
     boolean assembleLotteryStrategy(Long strategyId);
 
-    /**
-     * @description 获取抽奖策略装配后的随机结果
-     * @param strategyId:
-     * return Integer
-     * @author pig泉
-     * @date 22:04 2024/9/1
-     * {@link Integer}
-     */
-    Integer getRandomAwardId(Long strategyId);
-
 }
