@@ -21,4 +21,5 @@ public interface IStrategyRuleDao {
 
     StrategyRule queryStrategyRule(StrategyRule param);
 
+    String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel);
 }

@@ -128,4 +128,9 @@ public class StrategyRepository implements IStrategyRepository {
                 .ruleDesc(strategyRule.getRuleDesc())
                 .build();
     }
+
+    @Override
+    public String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel) {
+        return strategyRuleDao.queryStrategyRuleValue(strategyId, awardId, ruleModel);
+    }
 }
