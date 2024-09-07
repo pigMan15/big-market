@@ -28,6 +28,14 @@
         where strategy_id = #{strategyId}
     </select>
 
+    <select id="queryStrategyAwardRuleModelVO" parameterType="net.pigman.infrastructure.persistent.po.StrategyAward" resultType="java.lang.String">
+        select
+            rule_models
+        from strategy_award
+        where
+            strategy_id = #{strategyId}
+            and award_id = #{awardId}
+    </select>
 
 
 </mapper>

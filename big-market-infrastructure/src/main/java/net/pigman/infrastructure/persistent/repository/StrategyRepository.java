@@ -3,6 +3,7 @@ package net.pigman.infrastructure.persistent.repository;
 import net.pigman.domain.strategy.model.entity.StrategyAwardEntity;
 import net.pigman.domain.strategy.model.entity.StrategyEntity;
 import net.pigman.domain.strategy.model.entity.StrategyRuleEntity;
+import net.pigman.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import net.pigman.domain.strategy.repository.IStrategyRepository;
 import net.pigman.infrastructure.persistent.dao.IStrategyAwardDao;
 import net.pigman.infrastructure.persistent.dao.IStrategyDao;
@@ -132,5 +133,11 @@ public class StrategyRepository implements IStrategyRepository {
     @Override
     public String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel) {
         return strategyRuleDao.queryStrategyRuleValue(strategyId, awardId, ruleModel);
+    }
+
+    @Override
+    public StrategyAwardRuleModelVO queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId) {
+        String ruleModes = strategyAwardDao.queryStrategyAwardRuleModelVO(strategyId, awardId);
+        return StrategyAwardRuleModelVO.builder().ruleModels(ruleModes).build();
     }
 }

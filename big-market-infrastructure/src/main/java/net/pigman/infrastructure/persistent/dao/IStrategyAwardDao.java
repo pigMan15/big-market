@@ -1,5 +1,6 @@
 package net.pigman.infrastructure.persistent.dao;
 
+import net.pigman.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import net.pigman.infrastructure.persistent.po.StrategyAward;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,4 +22,5 @@ public interface IStrategyAwardDao {
 
     List<StrategyAward> queryStrategyAwardListByStrategyId(Long strategyId);
 
+    String queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId);
 }
