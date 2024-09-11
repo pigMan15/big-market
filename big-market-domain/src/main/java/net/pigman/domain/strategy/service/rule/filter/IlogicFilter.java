@@ -1,4 +1,4 @@
-package net.pigman.domain.strategy.service.rule;
+package net.pigman.domain.strategy.service.rule.filter;
 
 import net.pigman.domain.strategy.model.entity.RuleActionEntity;
 import net.pigman.domain.strategy.model.entity.RuleMatterEntity;

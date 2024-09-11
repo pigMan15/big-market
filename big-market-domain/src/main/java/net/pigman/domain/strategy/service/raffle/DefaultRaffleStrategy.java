@@ -6,13 +6,13 @@ import net.pigman.domain.strategy.model.entity.RuleActionEntity;
 import net.pigman.domain.strategy.model.entity.RuleMatterEntity;
 import net.pigman.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import net.pigman.domain.strategy.repository.IStrategyRepository;
+import net.pigman.domain.strategy.service.AbstractRaffleStrategy;
 import net.pigman.domain.strategy.service.armory.IStrategyDispatch;
-import net.pigman.domain.strategy.service.rule.IlogicFilter;
-import net.pigman.domain.strategy.service.rule.factory.DefaultLogicFactory;
+import net.pigman.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
+import net.pigman.domain.strategy.service.rule.filter.IlogicFilter;
+import net.pigman.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.dom4j.rule.Rule;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class DefaultRaffleStrategy extends AbstractRaffleStrategy{
+public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
 
     @Resource
     private DefaultLogicFactory logicFactory;
 
-    public DefaultRaffleStrategy(IStrategyRepository repository, IStrategyDispatch dispatch) {
-        super(repository, dispatch);
+    public DefaultRaffleStrategy(IStrategyRepository repository, IStrategyDispatch dispatch, DefaultChainFactory defaultChainFactory) {
+        super(repository, dispatch, defaultChainFactory);
     }
 
     @Override

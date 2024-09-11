@@ -1,11 +1,11 @@
-package net.pigman.domain.strategy.service.rule.factory;
+package net.pigman.domain.strategy.service.rule.filter.factory;
 
 import com.alibaba.fastjson2.util.AnnotationUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.pigman.domain.strategy.model.entity.RuleActionEntity;
 import net.pigman.domain.strategy.service.annotation.LogicStrategy;
-import net.pigman.domain.strategy.service.rule.IlogicFilter;
+import net.pigman.domain.strategy.service.rule.filter.IlogicFilter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * packageName net.pigman.domain.strategy.service.rule.factory
+ * packageName net.pigman.domain.strategy.service.rule.filter.factory
  *
  * @author pig泉
  * @version 1.0.0

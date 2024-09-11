@@ -49,7 +49,7 @@ public class StrategyArmoryDispatch implements IStrategyArmory, IStrategyDispatc
         StrategyEntity strategyEntity = strategyRepository.queryStrategyEntityByStrategyId(strategyId);
         String ruleWeight = strategyEntity.getRuleWeight();
         if (Objects.isNull(ruleWeight)) {
-            // 没有配置权重，不需要惊醒过滤，当做随机抽取
+            // 没有配置权重，不需要进行过滤，当做随机抽取
             assembleLotteryStrategy(String.valueOf(strategyId), strategyAwardEntityList);
             return true;
         }

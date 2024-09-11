@@ -33,6 +33,8 @@ public class StrategyTest {
     @Test
     public void testStrategyArmory() {
         boolean result = strategyArmory.assembleLotteryStrategy(100001L);
+        boolean result2 = strategyArmory.assembleLotteryStrategy(100002L);
+        boolean result3 = strategyArmory.assembleLotteryStrategy(100003L);
         log.info("测试结果:{}", result);
     }
 

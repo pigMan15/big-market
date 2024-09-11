@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.pigman.domain.strategy.service.rule.factory.DefaultLogicFactory;
+import net.pigman.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import net.pigman.types.common.Constants;
 
 import java.util.Arrays;

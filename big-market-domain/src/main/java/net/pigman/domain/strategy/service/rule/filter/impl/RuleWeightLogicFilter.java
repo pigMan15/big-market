@@ -1,4 +1,4 @@
-package net.pigman.domain.strategy.service.rule.impl;
+package net.pigman.domain.strategy.service.rule.filter.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import net.pigman.domain.strategy.model.entity.RuleActionEntity;
@@ -6,8 +6,8 @@ import net.pigman.domain.strategy.model.entity.RuleMatterEntity;
 import net.pigman.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import net.pigman.domain.strategy.repository.IStrategyRepository;
 import net.pigman.domain.strategy.service.annotation.LogicStrategy;
-import net.pigman.domain.strategy.service.rule.IlogicFilter;
-import net.pigman.domain.strategy.service.rule.factory.DefaultLogicFactory;
+import net.pigman.domain.strategy.service.rule.filter.IlogicFilter;
+import net.pigman.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import net.pigman.types.common.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
- * packageName net.pigman.domain.strategy.service.rule.impl
+ * packageName net.pigman.domain.strategy.service.rule.filter.impl
  *
  * @author pig泉
  * @version 1.0.0
