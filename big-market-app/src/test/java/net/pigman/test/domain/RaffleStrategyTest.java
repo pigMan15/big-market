@@ -8,7 +8,6 @@ import net.pigman.domain.strategy.service.IRaffleStrategy;
 import net.pigman.domain.strategy.service.armory.IStrategyArmory;
 import net.pigman.domain.strategy.service.rule.chain.impl.RuleWeightLogicChain;
 import net.pigman.domain.strategy.service.rule.filter.impl.RuleLockLogicFilter;
-import net.pigman.domain.strategy.service.rule.filter.impl.RuleWeightLogicFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,11 +47,12 @@ public class RaffleStrategyTest {
     public void setUp() {
 
         // 策略装配
-//        log.info("测试结果:{}", strategyArmory.assembleLotteryStrategy(100001l));
+        log.info("测试结果:{}", strategyArmory.assembleLotteryStrategy(100001l));
+        log.info("测试结果:{}", strategyArmory.assembleLotteryStrategy(100006l));
 
         ReflectionTestUtils.setField(ruleWeightLogicChain, "userScore", 4050L);
 
-        ReflectionTestUtils.setField(ruleLockLogicFilter, "userRaffleCount", 10L);
+//        ReflectionTestUtils.setField(ruleLockLogicFilter, "userRaffleCount", 10L);
 
     }
 
@@ -67,7 +67,7 @@ public class RaffleStrategyTest {
     public void testPerformRaffle() {
         RaffleFactorEntity raffleFactorEntity = RaffleFactorEntity.builder()
                 .userId("pigman")
-                .strategyId(100001l)
+                .strategyId(100006l)
                 .build();
         RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(raffleFactorEntity);
         log.info("请求参数:{}, 请求结果:{}", JSON.toJSONString(raffleFactorEntity), JSON.toJSONString(raffleAwardEntity));

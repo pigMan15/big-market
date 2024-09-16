@@ -9,7 +9,6 @@ import net.pigman.domain.strategy.service.rule.tree.ILogicTreeNode;
 import net.pigman.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import net.pigman.domain.strategy.service.rule.tree.factory.engine.IDecisionTreeEngine;
 import org.springframework.util.CollectionUtils;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,8 +35,8 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
     }
 
     @Override
-    public DefaultTreeFactory.StrategyAwardData process(String userId, Long strategyId, Integer awardId) {
-        DefaultTreeFactory.StrategyAwardData strategyAwardData = null;
+    public DefaultTreeFactory.StrategyAwardVO process(String userId, Long strategyId, Integer awardId) {
+        DefaultTreeFactory.StrategyAwardVO strategyAwardData = null;
 
         String nextNodeKey = ruleTreeVO.getTreeRootRuleNode();
         Map<String, RuleTreeNodeVO> treeNodeMap = ruleTreeVO.getTreeNodeMap();
@@ -51,7 +50,7 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
             // 决策点计算
             DefaultTreeFactory.TreeActionEntity treeActionEntity = logicTreeNode.logic(userId, strategyId, awardId);
             RuleLogicCheckTypeVO ruleLogicCheckType = treeActionEntity.getRuleLogicCheckType();
-            strategyAwardData = treeActionEntity.getStrategyAwardData();
+            strategyAwardData = treeActionEntity.getStrategyAwardVO();
             log.info("决策树引擎【{}】, treeId:{}, node:{}, code:{}", ruleTreeVO.getTreeName(), ruleTreeVO.getTreeId(),
                     nextNodeKey, ruleLogicCheckType.getCode());
 

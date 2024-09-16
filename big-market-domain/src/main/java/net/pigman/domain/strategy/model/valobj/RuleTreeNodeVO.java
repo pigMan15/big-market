@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ import java.util.List;
 public class RuleTreeNodeVO {
 
     // 规则树id
-    private Integer treeId;
+    private String treeId;
 
     // 规则key
     private String ruleKey;

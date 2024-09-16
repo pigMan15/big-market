@@ -3,8 +3,8 @@ package net.pigman.domain.strategy.repository;
 import net.pigman.domain.strategy.model.entity.StrategyAwardEntity;
 import net.pigman.domain.strategy.model.entity.StrategyEntity;
 import net.pigman.domain.strategy.model.entity.StrategyRuleEntity;
+import net.pigman.domain.strategy.model.valobj.RuleTreeVO;
 import net.pigman.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
-
 import java.util.List;
 import java.util.Map;
 
@@ -38,4 +38,7 @@ public interface IStrategyRepository {
     StrategyAwardRuleModelVO queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId);
 
     String queryStrategyRuleValue(Long strategyId, String ruleModel);
+
+    RuleTreeVO queryRuleTreeVOByTreeId(String treeId);
+
 }

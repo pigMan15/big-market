@@ -18,6 +18,8 @@ public class Constants {
 
         public static String STRATEGY_RATE_RANGE_KEY = "big_market_strategy_rate_range_key_";
 
+        public static String RULE_TREE_VO_KEY = "rule_tree_vo_key_";
+
     }
 
 }

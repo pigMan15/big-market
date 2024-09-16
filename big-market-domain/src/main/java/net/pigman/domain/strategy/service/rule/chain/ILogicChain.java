@@ -1,5 +1,7 @@
 package net.pigman.domain.strategy.service.rule.chain;
 
+import net.pigman.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
+
 /**
  * packageName net.pigman.domain.strategy.service.rule.chain
  *
@@ -11,6 +13,6 @@ package net.pigman.domain.strategy.service.rule.chain;
  */
 public interface ILogicChain extends ILogicChainArmory{
 
-    Integer logic(String userId, Long strategyId);
+    DefaultChainFactory.StrategyAwardVO logic(String userId, Long strategyId);
 
 }

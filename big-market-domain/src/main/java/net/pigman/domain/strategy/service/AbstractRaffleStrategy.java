@@ -3,19 +3,13 @@ package net.pigman.domain.strategy.service;
 import lombok.extern.slf4j.Slf4j;
 import net.pigman.domain.strategy.model.entity.RaffleAwardEntity;
 import net.pigman.domain.strategy.model.entity.RaffleFactorEntity;
-import net.pigman.domain.strategy.model.entity.RuleActionEntity;
-import net.pigman.domain.strategy.model.entity.StrategyEntity;
-import net.pigman.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
-import net.pigman.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import net.pigman.domain.strategy.repository.IStrategyRepository;
 import net.pigman.domain.strategy.service.armory.IStrategyDispatch;
-import net.pigman.domain.strategy.service.rule.chain.ILogicChain;
 import net.pigman.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
-import net.pigman.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
+import net.pigman.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import net.pigman.types.enums.ResponseCode;
 import net.pigman.types.exception.AppException;
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
 
 /**
@@ -38,10 +32,13 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
 
     private DefaultChainFactory defaultChainFactory;
 
-    public AbstractRaffleStrategy(IStrategyRepository repository, IStrategyDispatch dispatch, DefaultChainFactory defaultChainFactory) {
+    private DefaultTreeFactory defaultTreeFactory;
+
+    public AbstractRaffleStrategy(IStrategyRepository repository, IStrategyDispatch dispatch, DefaultChainFactory defaultChainFactory, DefaultTreeFactory defaultTreeFactory) {
         this.repository = repository;
         this.dispatch = dispatch;
         this.defaultChainFactory = defaultChainFactory;
+        this.defaultTreeFactory = defaultTreeFactory;
     }
 
     @Override
@@ -54,31 +51,47 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
             throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
         }
 
-        // 获取抽奖责任链，前置规则责任链处理
-        ILogicChain iLogicChain = defaultChainFactory.openLogicChain(strategyId);
+        // 责任链抽奖计算【这步拿到的是初步的抽奖ID，之后需要根据ID处理抽奖】注意；黑名单、权重等非默认抽奖的直接返回抽奖结果
+        DefaultChainFactory.StrategyAwardVO chainStrategyAwardVO = raffleLogicChain(userId, strategyId);
+        log.info("抽奖策略计算-责任链,{},{},{},{}", userId, strategyId, chainStrategyAwardVO.getAwardId(), chainStrategyAwardVO.getLogicModel());
 
-        // 获取最终校验结果：奖品id
-        Integer awardId = iLogicChain.logic(userId, strategyId);
-
-        // 查询奖品规则（抽奖中：根据奖品id查询是否还需进行次数锁过滤；抽奖后：扣减完奖品库存后过滤，抽奖中拦截和无库存则走兜底）
-        StrategyAwardRuleModelVO awardRuleModelVO = repository.queryStrategyAwardRuleModelVO(strategyId, awardId);
-
-        // 抽奖中-规则过滤
-        RuleActionEntity<RuleActionEntity.RaffleCenterEntity> ruleActionCenterEntity = this.doCheckRaffCenterLogic(
-                RaffleFactorEntity.builder().strategyId(strategyId).userId(userId).awardId(awardId).build(),
-                awardRuleModelVO.raffleCenterRuleModelList()
-        );
-
-        if(RuleLogicCheckTypeVO.TAKE_OVER.getCode().equalsIgnoreCase(ruleActionCenterEntity.getCode())) {
-           log.info("【抽奖中规则拦截】, 通过抽奖后规则rule_luck_award 走兜底奖品");
-           return RaffleAwardEntity.builder().awardDesc("抽奖中规则拦截, 通过抽奖后规则rule_luck_award 走兜底奖品").build();
+        if (!DefaultChainFactory.LogicModel.RULE_DEFAULT.getCode().equals(chainStrategyAwardVO.getLogicModel())) {
+            return RaffleAwardEntity.builder().awardId(chainStrategyAwardVO.getAwardId()).build();
         }
 
-        return RaffleAwardEntity.builder().awardId(awardId).build();
+        // 规则树抽奖过滤【奖品ID，会根据抽奖次数判断、库存判断、兜底里返回最终可获得的奖品信息】
+        DefaultTreeFactory.StrategyAwardVO treeStrategyAwardVO = raffleLogicTree(userId, strategyId, chainStrategyAwardVO.getAwardId());
+        log.info("抽奖策略计算-规则树 {} {} {} {}", userId, strategyId, treeStrategyAwardVO.getAwardId(), treeStrategyAwardVO.getAwardRuleValue());
+
+        return RaffleAwardEntity.builder()
+                .awardId(treeStrategyAwardVO.getAwardId())
+                .awardConfig(treeStrategyAwardVO.getAwardRuleValue())
+                .build();
     }
 
-    protected  abstract RuleActionEntity<RuleActionEntity.RaffleBeforeEntity> doCheckRaffBeforeLogic(RaffleFactorEntity factorEntity, String... logics);
+    /**
+     * @description 责任链抽奖
+     * @param userId:
+     * @param strategyId:
+     * return StrategyAwardVO
+     * @author pig泉
+     * @date 10:44 2024/9/16
+     * {@link StrategyAwardVO}
+     */
+    public abstract DefaultChainFactory.StrategyAwardVO raffleLogicChain(String userId, Long strategyId);
 
-    protected  abstract RuleActionEntity<RuleActionEntity.RaffleCenterEntity> doCheckRaffCenterLogic(RaffleFactorEntity factorEntity, String... logics);
+
+    /**
+     * @description 决策树抽奖
+     * @param userId:
+     * @param strategyId:
+     * @param awardId:
+     * return StrategyAwardVO
+     * @author pig泉
+     * @date 10:47 2024/9/16
+     * {@link StrategyAwardVO}
+     */
+    public abstract DefaultTreeFactory.StrategyAwardVO raffleLogicTree(String userId, Long strategyId, Integer awardId);
+
 
 }

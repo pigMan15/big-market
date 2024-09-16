@@ -1,5 +1,6 @@
 package net.pigman.test.domain;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import net.pigman.domain.strategy.service.rule.chain.ILogicChain;
 import net.pigman.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
@@ -44,8 +45,8 @@ public class LogicChainTest {
     public void testLogicChainRuleBlackList() {
 
         ILogicChain logicChain = defaultChainFactory.openLogicChain(100001L);
-        Integer awardId = logicChain.logic("user001", 100001L);
-        log.info("测试结果:{}", awardId);
+        DefaultChainFactory.StrategyAwardVO strategyAwardVO = logicChain.logic("user001", 100001L);
+        log.info("测试结果:{}", JSON.toJSONString(strategyAwardVO));
 
     }
 
@@ -53,15 +54,15 @@ public class LogicChainTest {
     public void testLogicChainRuleWeight() {
         ReflectionTestUtils.setField(ruleWeightLogicChain, "userScore",  4500L);
         ILogicChain logicChain = defaultChainFactory.openLogicChain(100001L);
-        Integer awardId = logicChain.logic("pigman", 100001L);
-        log.info("测试结果:{}", awardId);
+        DefaultChainFactory.StrategyAwardVO strategyAwardVO = logicChain.logic("pigman", 100001L);
+        log.info("测试结果:{}", JSON.toJSONString(strategyAwardVO));
     }
 
     @Test
     public void testLogicChainDefault() {
         ILogicChain logicChain = defaultChainFactory.openLogicChain(100002L);
-        Integer awardId = logicChain.logic("pigman", 100002L);
-        log.info("测试结果:{}", awardId);
+        DefaultChainFactory.StrategyAwardVO strategyAwardVO = logicChain.logic("pigman", 100002L);
+        log.info("测试结果:{}", JSON.toJSONString(strategyAwardVO));
     }
 
 }

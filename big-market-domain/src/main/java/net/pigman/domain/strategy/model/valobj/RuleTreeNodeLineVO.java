@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 
 /**
  * packageName net.pigman.domain.strategy.model.valobj
@@ -22,7 +21,7 @@ import org.checkerframework.checker.units.qual.A;
 public class RuleTreeNodeLineVO {
 
     // 规则树id
-    private Integer treeId;
+    private String treeId;
 
     // from节点
     private String ruleNodeFrom;

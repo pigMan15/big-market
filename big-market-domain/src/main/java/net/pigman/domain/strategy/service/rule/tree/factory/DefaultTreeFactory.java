@@ -10,7 +10,6 @@ import net.pigman.domain.strategy.service.rule.tree.ILogicTreeNode;
 import net.pigman.domain.strategy.service.rule.tree.factory.engine.IDecisionTreeEngine;
 import net.pigman.domain.strategy.service.rule.tree.factory.engine.impl.DecisionTreeEngine;
 import org.springframework.stereotype.Service;
-
 import java.util.Map;
 
 /**
@@ -37,8 +36,6 @@ public class DefaultTreeFactory {
 
     /**
      * @description 决策树对应的执行动作
-     * @param null:
-     * return null
      * @author pig泉
      * @date 15:03 2024/9/14
      * {@link null}
@@ -50,14 +47,13 @@ public class DefaultTreeFactory {
     public static class TreeActionEntity {
 
         private RuleLogicCheckTypeVO ruleLogicCheckType;
-        private StrategyAwardData strategyAwardData;
+
+        private StrategyAwardVO strategyAwardVO;
 
     }
 
     /**
      * @description 抽奖策略奖品
-     * @param null:
-     * return null
      * @author pig泉
      * @date 15:04 2024/9/14
      * {@link null}
@@ -66,7 +62,7 @@ public class DefaultTreeFactory {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class StrategyAwardData {
+    public static class StrategyAwardVO {
 
         // 抽奖奖品id
         private Integer awardId;
