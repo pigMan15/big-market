@@ -23,4 +23,15 @@ public interface IStrategyDispatch {
 
     Integer getRandomAwardId(Long strategyId, String ruleWeightValue);
 
+    /**
+     * @description 扣减奖品库存
+     * @param strategyId:
+     * @param awardId:
+     * return Boolean
+     * @author pig泉
+     * @date 10:18 2024/9/17
+     * {@link Boolean}
+     */
+    Boolean subtractionAwardStock(Long strategyId, Integer awardId);
+
 }

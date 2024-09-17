@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.annotation.Resource;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * packageName net.pigman.test.domain
@@ -47,7 +48,7 @@ public class RaffleStrategyTest {
     public void setUp() {
 
         // 策略装配
-        log.info("测试结果:{}", strategyArmory.assembleLotteryStrategy(100001l));
+//        log.info("测试结果:{}", strategyArmory.assembleLotteryStrategy(100001l));
         log.info("测试结果:{}", strategyArmory.assembleLotteryStrategy(100006l));
 
         ReflectionTestUtils.setField(ruleWeightLogicChain, "userScore", 4050L);
@@ -71,6 +72,19 @@ public class RaffleStrategyTest {
                 .build();
         RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(raffleFactorEntity);
         log.info("请求参数:{}, 请求结果:{}", JSON.toJSONString(raffleFactorEntity), JSON.toJSONString(raffleAwardEntity));
+    }
+
+    @Test
+    public void testPerFormRaffleStock() throws InterruptedException {
+        for (int i = 0; i < 5; i++) {
+            RaffleFactorEntity raffleFactorEntity = RaffleFactorEntity.builder()
+                    .userId("pigman")
+                    .strategyId(100006l)
+                    .build();
+            RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(raffleFactorEntity);
+            log.info("请求参数:{}, 请求结果:{}", JSON.toJSONString(raffleFactorEntity), JSON.toJSONString(raffleAwardEntity));
+        }
+        new CountDownLatch(1).await();
     }
 
     /**

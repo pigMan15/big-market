@@ -1,5 +1,6 @@
 package net.pigman.infrastructure.persistent.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import net.pigman.domain.strategy.model.entity.StrategyAwardEntity;
 import net.pigman.domain.strategy.model.entity.StrategyEntity;
 import net.pigman.domain.strategy.model.entity.StrategyRuleEntity;
@@ -10,10 +11,13 @@ import net.pigman.infrastructure.persistent.po.*;
 import net.pigman.infrastructure.persistent.redis.IRedisService;
 import net.pigman.types.common.Constants;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RBlockingQueue;
+import org.redisson.api.RDelayedQueue;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
  * @date 2024/9/1
  * @description 策略服务仓储实现
  */
+@Slf4j
 @Repository
 public class StrategyRepository implements IStrategyRepository {
 
@@ -198,6 +203,54 @@ public class StrategyRepository implements IStrategyRepository {
 
         redisService.setValue(cacheKey, ruleTreeVO);
         return ruleTreeVO;
+    }
+
+    @Override
+    public void cacheStrategyAwardCount(String cacheKey, Integer awardCount) {
+        if (redisService.isExists(cacheKey)) {
+            return;
+        }
+        redisService.setAtomicLong(cacheKey, awardCount);
+    }
+
+    @Override
+    public Boolean subtractionAwardStock(String cacheKey) {
+        long surplus = redisService.decr(cacheKey);
+        if (surplus < 0) {
+            // 避免库存扣减完，恢复为0
+            redisService.setValue(cacheKey, 0);
+            return false;
+        }
+        // 扣减库存成功，对每一件奖品库存进行加锁，每件库存只能卖一次，避免超卖
+        String lockKey = cacheKey + Constants.UNDERLINE + surplus;
+        Boolean lock = redisService.setNx(lockKey);
+        if (!lock) {
+            log.info("策略奖品库存加锁失败:{}", lockKey);
+        }
+        return lock;
+    }
+
+    @Override
+    public void awardStockConsumeSendQueue(StrategyAwardStockKeyVO strategyAwardStockKeyVO) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_QUEEN_KEY;
+        RBlockingQueue<Object> blockingQueue = redisService.getBlockingQueue(cacheKey);
+        RDelayedQueue<Object> delayedQueue = redisService.getDelayedQueue(blockingQueue);
+        delayedQueue.offer(strategyAwardStockKeyVO, 3, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public StrategyAwardStockKeyVO takeQueueValue() {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_QUEEN_KEY;
+        RBlockingQueue<StrategyAwardStockKeyVO> blockingQueue = redisService.getBlockingQueue(cacheKey);
+        return blockingQueue.poll();
+    }
+
+    @Override
+    public void updateStrategyAwardStock(Long strategyId, Integer awardId) {
+            StrategyAward strategyAward = new StrategyAward();
+            strategyAward.setStrategyId(strategyId);
+            strategyAward.setAwardId(awardId);
+            strategyAwardDao.updateStrategyAwardStock(strategyAward);
     }
 
 

@@ -22,7 +22,7 @@ import java.util.Objects;
  * @description 抽奖策略抽象类, 定义抽奖标准流程
  */
 @Slf4j
-public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
+public abstract class AbstractRaffleStrategy implements IRaffleStrategy, IRaffleStock {
 
     // 策略仓储服务
     protected IStrategyRepository repository;

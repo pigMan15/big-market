@@ -3,6 +3,7 @@ package net.pigman.domain.strategy.service.raffle;
 import lombok.extern.slf4j.Slf4j;
 import net.pigman.domain.strategy.model.valobj.RuleTreeVO;
 import net.pigman.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
+import net.pigman.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 import net.pigman.domain.strategy.repository.IStrategyRepository;
 import net.pigman.domain.strategy.service.AbstractRaffleStrategy;
 import net.pigman.domain.strategy.service.armory.IStrategyDispatch;
@@ -58,4 +59,13 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
     }
 
 
+    @Override
+    public StrategyAwardStockKeyVO takeQueueValue() {
+        return repository.takeQueueValue();
+    }
+
+    @Override
+    public void updateStrategyAwardStock(Long strategyId, Integer awardId) {
+        repository.updateStrategyAwardStock(strategyId, awardId);
+    }
 }

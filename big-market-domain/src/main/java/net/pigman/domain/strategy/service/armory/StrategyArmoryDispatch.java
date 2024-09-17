@@ -5,6 +5,7 @@ import net.pigman.domain.strategy.model.entity.StrategyAwardEntity;
 import net.pigman.domain.strategy.model.entity.StrategyEntity;
 import net.pigman.domain.strategy.model.entity.StrategyRuleEntity;
 import net.pigman.domain.strategy.repository.IStrategyRepository;
+import net.pigman.types.common.Constants;
 import net.pigman.types.exception.AppException;
 import org.springframework.stereotype.Service;
 
@@ -42,18 +43,25 @@ public class StrategyArmoryDispatch implements IStrategyArmory, IStrategyDispatc
      */
     @Override
     public boolean assembleLotteryStrategy(Long strategyId) {
-        // 查询策略配置
+        // 1.查询策略配置
         List<StrategyAwardEntity> strategyAwardEntityList = strategyRepository.queryStrategyAwardList(strategyId);
 
-        // 权重策略配置
+        // 2. 缓存奖品库存
+        for (StrategyAwardEntity strategyAward: strategyAwardEntityList) {
+            Integer awardId = strategyAward.getAwardId();
+            Integer awardCount = strategyAward.getAwardCount();
+            cacheStrategyAwardCount(strategyId, awardId, awardCount);
+        }
+
+        // 3.1 没有配置权重，不需要进行过滤，当做全量抽奖
+        assembleLotteryStrategy(String.valueOf(strategyId), strategyAwardEntityList);
+
+        // 3.2 权重策略配置
         StrategyEntity strategyEntity = strategyRepository.queryStrategyEntityByStrategyId(strategyId);
         String ruleWeight = strategyEntity.getRuleWeight();
         if (Objects.isNull(ruleWeight)) {
-            // 没有配置权重，不需要进行过滤，当做随机抽取
-            assembleLotteryStrategy(String.valueOf(strategyId), strategyAwardEntityList);
             return true;
         }
-
 
         StrategyRuleEntity strategyRuleEntity = strategyRepository.queryStrategyRule(strategyId, ruleWeight);
         if (Objects.isNull(strategyRuleEntity)) {
@@ -125,4 +133,25 @@ public class StrategyArmoryDispatch implements IStrategyArmory, IStrategyDispatc
         // 根据范围生成随机值，返回概率值查找表对应的奖品结果
         return strategyRepository.getStrategyAwardAssemble(key, new SecureRandom().nextInt(rateRange));
     }
+
+    /**
+     * @description 缓存奖品到redis
+     * @param strategyId:
+     * @param awardId:
+     * @param awardCount:
+     * return void
+     * @author pig泉
+     * @date 09:37 2024/9/17
+     */
+    private void cacheStrategyAwardCount(Long strategyId, Integer awardId, Integer awardCount) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId + Constants.UNDERLINE + awardId;
+        strategyRepository.cacheStrategyAwardCount(cacheKey, awardCount);
+    }
+
+    @Override
+    public Boolean subtractionAwardStock(Long strategyId, Integer awardId) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId + Constants.UNDERLINE + awardId;
+        return strategyRepository.subtractionAwardStock(cacheKey);
+    }
+
 }
