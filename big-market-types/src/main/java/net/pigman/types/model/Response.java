@@ -1,4 +1,4 @@
-package net.pigman.api.response;
+package net.pigman.types.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

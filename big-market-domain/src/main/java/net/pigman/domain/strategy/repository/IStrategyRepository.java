@@ -76,6 +76,17 @@ public interface IStrategyRepository {
      */
     void updateStrategyAwardStock(Long strategyId, Integer awardId);
 
+    /**
+     * @description 查询奖品信息
+     * @param strategyId:
+     * @param awardId:
+     * return StrategyAwardEntity
+     * @author pig泉
+     * @date 15:18 2024/9/22
+     * {@link StrategyAwardEntity}
+     */
+    StrategyAwardEntity queryStrategyAwardEntity(Long strategyId, Integer awardId);
+
 }
 
 

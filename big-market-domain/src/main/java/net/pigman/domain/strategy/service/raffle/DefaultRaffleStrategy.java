@@ -1,11 +1,14 @@
 package net.pigman.domain.strategy.service.raffle;
 
 import lombok.extern.slf4j.Slf4j;
+import net.pigman.domain.strategy.model.entity.StrategyAwardEntity;
 import net.pigman.domain.strategy.model.valobj.RuleTreeVO;
 import net.pigman.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import net.pigman.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 import net.pigman.domain.strategy.repository.IStrategyRepository;
 import net.pigman.domain.strategy.service.AbstractRaffleStrategy;
+import net.pigman.domain.strategy.service.IRaffleAward;
+import net.pigman.domain.strategy.service.IRaffleStock;
 import net.pigman.domain.strategy.service.armory.IStrategyDispatch;
 import net.pigman.domain.strategy.service.rule.chain.ILogicChain;
 import net.pigman.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
@@ -14,6 +17,9 @@ import net.pigman.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import net.pigman.domain.strategy.service.rule.tree.factory.engine.IDecisionTreeEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,7 +33,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
-public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
+public class DefaultRaffleStrategy extends AbstractRaffleStrategy implements IRaffleStock, IRaffleAward {
 
     @Autowired
     private DefaultChainFactory defaultChainFactory;
@@ -67,5 +73,10 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
     @Override
     public void updateStrategyAwardStock(Long strategyId, Integer awardId) {
         repository.updateStrategyAwardStock(strategyId, awardId);
+    }
+
+    @Override
+    public List<StrategyAwardEntity> queryRaffleStrategyAwardList(Long strategyId) {
+        return repository.queryStrategyAwardList(strategyId);
     }
 }

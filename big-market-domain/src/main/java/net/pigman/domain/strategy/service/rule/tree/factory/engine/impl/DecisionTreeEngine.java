@@ -74,7 +74,7 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
                 return treeNodeLine.getRuleNodeTo();
             }
         }
-        throw new RuntimeException("决策树引擎异常，找不到可执行的下一个节点!");
+        return null;
     }
 
     /**
