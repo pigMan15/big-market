@@ -1,22 +1,27 @@
-package net.pigman.infrastructure.persistent.po;
+package net.pigman.domain.activity.model.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import net.pigman.domain.activity.model.valobj.OrderStateVO;
 
 import java.util.Date;
 
 /**
- * packageName net.pigman.infrastructure.persistent.po
+ * packageName net.pigman.domain.activity.model.entity
  *
  * @author pig泉
  * @version 1.0.0
- * @className RaffleActivityOrder
- * @date 2024/10/3
- * @description 抽奖活动订单
+ * @className ActivityOrderEntity
+ * @date 2024/10/7
+ * @description 活动订单实体对象
  */
 @Data
-public class RaffleActivityOrder {
-
-    private Long id;
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ActivityOrderEntity {
 
     // 用户id
     private String userId;
@@ -45,13 +50,7 @@ public class RaffleActivityOrder {
     // 月次数
     private Integer monthCount;
 
-    // 订单状态(not_used, used, expire)
-    private String state;
-
-    // 创建时间
-    private Date createTime;
-
-    // 更新时间
-    private Date updateTime;
+    // 订单状态
+    private OrderStateVO state;
 
 }

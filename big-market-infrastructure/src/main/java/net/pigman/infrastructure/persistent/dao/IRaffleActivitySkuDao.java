@@ -1,5 +1,6 @@
 package net.pigman.infrastructure.persistent.dao;
 
+import net.pigman.infrastructure.persistent.po.RaffleActivitySku;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,8 +10,11 @@ import org.apache.ibatis.annotations.Mapper;
  * @version 1.0.0
  * @className IRaffleActivityAccountFlowDao
  * @date 2024/10/4
- * @description 抽奖活动账户流水DAO
+ * @description 商品SkuDAO
  */
 @Mapper
-public interface IRaffleActivityAccountFlowDao {
+public interface IRaffleActivitySkuDao {
+
+    RaffleActivitySku queryActivitySku(Long sku);
+
 }

@@ -1,4 +1,4 @@
-package net.pigman.test.domain;
+package net.pigman.test.domain.strategy;
 
 import lombok.extern.slf4j.Slf4j;
 import net.pigman.domain.strategy.service.armory.IStrategyArmory;
