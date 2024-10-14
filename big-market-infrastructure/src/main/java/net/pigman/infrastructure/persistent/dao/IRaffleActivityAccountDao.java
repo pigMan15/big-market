@@ -1,5 +1,6 @@
 package net.pigman.infrastructure.persistent.dao;
 
+import net.pigman.infrastructure.persistent.po.RaffleActivityAccount;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,4 +14,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface IRaffleActivityAccountDao {
+
+    void insert(RaffleActivityAccount raffleActivityAccount);
+
+    Integer updateAccountQuota(RaffleActivityAccount raffleActivityAccount);
+
 }

@@ -3,7 +3,7 @@ package net.pigman.test.domain.activity;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import net.pigman.domain.activity.model.entity.ActivityOrderEntity;
-import net.pigman.domain.activity.model.entity.ActivityShopCartEntity;
+import net.pigman.domain.activity.model.entity.SkuRechargeEntity;
 import net.pigman.domain.activity.service.IRaffleOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,11 +31,21 @@ public class RaffleOrderTest {
 
     @Test
     public void testCreateRaffleActivityOrder() {
-        ActivityShopCartEntity activityShopCartEntity = new ActivityShopCartEntity();
+        SkuRechargeEntity activityShopCartEntity = new SkuRechargeEntity();
         activityShopCartEntity.setUserId("pigman");
         activityShopCartEntity.setSku(9011L);
-        ActivityOrderEntity raffleActivityOrder = raffleOrder.createRaffleActivityOrder(activityShopCartEntity);
-        log.info("测试结果:{}", JSON.toJSONString(raffleActivityOrder));
+//        ActivityOrderEntity raffleActivityOrder = raffleOrder.createRaffleActivityOrder(activityShopCartEntity);
+//        log.info("测试结果:{}", JSON.toJSONString(raffleActivityOrder));
+    }
+
+    @Test
+    public void testCreateSkuChargeOrder() {
+        SkuRechargeEntity skuRechargeEntity = new SkuRechargeEntity();
+        skuRechargeEntity.setUserId("pigman");
+        skuRechargeEntity.setSku(9011L);
+        skuRechargeEntity.setOutBusinessNo("700091009116");
+        String orderId = raffleOrder.createSkuRechargeOrder(skuRechargeEntity);
+        log.info("测试结果:{}", orderId);
     }
 
 }
