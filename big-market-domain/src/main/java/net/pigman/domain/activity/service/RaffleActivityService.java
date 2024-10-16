@@ -2,6 +2,7 @@ package net.pigman.domain.activity.service;
 
 import net.pigman.domain.activity.model.aggregate.CreateOrderAggregate;
 import net.pigman.domain.activity.model.entity.*;
+import net.pigman.domain.activity.model.valobj.ActivitySkuStockKeyVO;
 import net.pigman.domain.activity.model.valobj.OrderStateVO;
 import net.pigman.domain.activity.repository.IActivityRepository;
 import net.pigman.domain.activity.service.rule.factory.DefaultActivityChainFactory;
@@ -21,7 +22,7 @@ import java.util.Date;
  * @description 抽奖活动服务
  */
 @Service
-public class RaffleActivityService extends AbstractRaffleActivity {
+public class RaffleActivityService extends AbstractRaffleActivity implements ISkuStock {
 
     public RaffleActivityService(
             DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
@@ -61,5 +62,25 @@ public class RaffleActivityService extends AbstractRaffleActivity {
     @Override
     protected void doSaveOrder(CreateOrderAggregate createOrderAggregate) {
         activityRepository.doSaveOrder(createOrderAggregate);
+    }
+
+    @Override
+    public ActivitySkuStockKeyVO takeQueueValue() {
+        return activityRepository.takeQueueValue();
+    }
+
+    @Override
+    public void clearQueueValue() {
+        activityRepository.clearQueueValue();
+    }
+
+    @Override
+    public void updateActivitySkuStock(Long sku) {
+        activityRepository.updateActivitySkuStock(sku);
+    }
+
+    @Override
+    public void clearActivitySkuStock(Long sku) {
+        activityRepository.clearActivitySkuStock(sku);
     }
 }

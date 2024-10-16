@@ -1,16 +1,18 @@
 package net.pigman.test.domain.activity;
 
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import net.pigman.domain.activity.model.entity.ActivityOrderEntity;
 import net.pigman.domain.activity.model.entity.SkuRechargeEntity;
 import net.pigman.domain.activity.service.IRaffleOrder;
+import net.pigman.domain.activity.service.armory.IActivityArmory;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * packageName net.pigman.test.domain.activity
@@ -28,6 +30,14 @@ public class RaffleOrderTest {
 
     @Resource
     private IRaffleOrder raffleOrder;
+
+    @Resource
+    private IActivityArmory activityArmory;
+
+    @Before
+    public void setup() {
+        log.info("装配活动:{}", activityArmory.assembleActivitySku(9011L));
+    }
 
     @Test
     public void testCreateRaffleActivityOrder() {
@@ -47,5 +57,23 @@ public class RaffleOrderTest {
         String orderId = raffleOrder.createSkuRechargeOrder(skuRechargeEntity);
         log.info("测试结果:{}", orderId);
     }
+
+    @Test
+    public void testCreateSkuRechargeOrderV2() throws InterruptedException {
+        try {
+            for (int i=0; i<20; i++) {
+                SkuRechargeEntity skuRechargeEntity = new SkuRechargeEntity();
+                skuRechargeEntity.setUserId("pigman");
+                skuRechargeEntity.setSku(9011L);
+                skuRechargeEntity.setOutBusinessNo(RandomStringUtils.randomNumeric(12));
+                String orderId = raffleOrder.createSkuRechargeOrder(skuRechargeEntity);
+                log.info("测试结果:{}", orderId);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        new CountDownLatch(1).await();
+    }
+
 
 }

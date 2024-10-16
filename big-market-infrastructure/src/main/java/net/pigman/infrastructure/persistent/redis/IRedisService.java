@@ -3,6 +3,7 @@ package net.pigman.infrastructure.persistent.redis;
 import org.redisson.api.*;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description Redis 服务
@@ -262,4 +263,15 @@ public interface IRedisService {
     */
    Boolean setNx(String key);
 
+   /**
+    * @description
+    * @param lockKey:
+    * @param expireTime:
+    * @param timeUnit:
+    * return Boolean
+    * @author pig泉
+    * @date 22:10 2024/10/15
+    * {@link Boolean}
+    */
+   Boolean setNx(String lockKey, long expireTime, TimeUnit timeUnit);
 }

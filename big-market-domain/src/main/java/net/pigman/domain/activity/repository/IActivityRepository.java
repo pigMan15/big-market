@@ -4,6 +4,9 @@ import net.pigman.domain.activity.model.aggregate.CreateOrderAggregate;
 import net.pigman.domain.activity.model.entity.ActivityCountEntity;
 import net.pigman.domain.activity.model.entity.ActivityEntity;
 import net.pigman.domain.activity.model.entity.ActivitySkuEntity;
+import net.pigman.domain.activity.model.valobj.ActivitySkuStockKeyVO;
+
+import java.util.Date;
 
 /**
  * packageName net.pigman.domain.activity.repository
@@ -23,4 +26,18 @@ public interface IActivityRepository {
     ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId);
 
     void doSaveOrder(CreateOrderAggregate createOrderAggregate);
+
+    void cacheActivitySkuStockCount(String cacheKey, Integer stockCount);
+
+    boolean substractionActivitySkuStock(Long sku, String cacheKey, Date endDateTime);
+
+    void activitySkuStockConsumeSendQueue(ActivitySkuStockKeyVO build);
+
+    ActivitySkuStockKeyVO takeQueueValue();
+
+    void clearQueueValue();
+
+    void updateActivitySkuStock(Long sku);
+
+    void clearActivitySkuStock(Long sku);
 }
